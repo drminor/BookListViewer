@@ -17,16 +17,16 @@ namespace BookListViewer.ViewModels
 
         #region Constructor
 
-        public BookListVM(List<BookRec> lst)
+        public BookListVM(List<BookRecDTO> lst)
         {
             Catalog = ProcessBookList(lst);
         }
 
-        private ObservableCollection<BookReadOnly> ProcessBookList(List<BookRec> lst)
+        private ObservableCollection<BookReadOnly> ProcessBookList(List<BookRecDTO> lst)
         {
             ObservableCollection<BookReadOnly> result = new ObservableCollection<BookReadOnly>();
 
-            foreach (BookRec br in lst)
+            foreach (BookRecDTO br in lst)
             {
                 BookReadOnly bookReadOnly = new BookReadOnly(br);
                 result.Add(bookReadOnly);

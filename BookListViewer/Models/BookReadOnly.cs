@@ -9,19 +9,19 @@ namespace BookListViewer.Models
         public int Id { get; }
         public string Author { get; }
         public string Title { get; }
-        public BookGenre BookGenre { get; }
+        public Genre BookGenre { get; }
         public Decimal Price { get; }
         public DateTime PublishDate { get; }
         public string Description { get; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public BookReadOnly(BookRec bookRec)
+        public BookReadOnly(BookRecDTO bookRec)
         {
             Id = bookRec.Id;
             Author = bookRec.Author;
             Title = bookRec.Title;
-            BookGenre = bookRec.BookGenre;
+            BookGenre = bookRec.Genre;
             Price = bookRec.Price;
             PublishDate = bookRec.PublishDate;
             Description = bookRec.Description;

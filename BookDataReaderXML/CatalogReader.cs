@@ -7,9 +7,9 @@ namespace BookDataReaderXML
 {
     public class CatalogReader
     {
-        public List<BookRec> FetchBookData(string path)
+        public List<BookRecDTO> FetchBookData(string path)
         {
-            List<BookRec> result = new List<BookRec>();
+            List<BookRecDTO> result = new List<BookRecDTO>();
 
             XmlTextReader reader = new XmlTextReader(path)
             {
@@ -36,9 +36,9 @@ namespace BookDataReaderXML
             return result;
         }
 
-        private BookRec ParseBookRec(XmlTextReader reader)
+        private BookRecDTO ParseBookRec(XmlTextReader reader)
         {
-            BookRec result = new BookRec();
+            BookRecDTO result = new BookRecDTO();
 
             string idPlusPrefix = reader.GetAttribute("id");
             result.Id = GetId(idPlusPrefix);
@@ -61,7 +61,7 @@ namespace BookDataReaderXML
             return result;
         }
 
-        private void HandleElementNode(XmlTextReader reader, BookRec bookRec)
+        private void HandleElementNode(XmlTextReader reader, BookRecDTO bookRec)
         {
             switch (reader.Name)
             {
