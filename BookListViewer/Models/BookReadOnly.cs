@@ -14,7 +14,12 @@ namespace BookListViewer.Models
         public DateTime PublishDate { get; }
         public string Description { get; }
 
+        // We must implement the INotifyPropertyChanged to avoid memory leaks with WPF,
+        // however since this is a readonly implementation, the event is never raised.
+#pragma warning disable 67, CS0535
         public event PropertyChangedEventHandler PropertyChanged;
+#pragma warning restore 67, CS0535
+
 
         public BookReadOnly(BookRecDTO bookRec)
         {
