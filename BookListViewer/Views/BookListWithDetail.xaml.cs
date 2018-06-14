@@ -20,11 +20,15 @@ namespace BookListViewer.Views
             // TODO: Create two new methods: BeginFetchBookData and EndFetchBookData
             // and have the calling window create the Reader and call the BeginFetchBookData method.
             // This constuctor can then call EndFetchBookData, having been passed a reference to the Reader.
-            List<BookRecDTO> catalog = catReader.FetchBookData(XML_DATA_PATH);
+            List<BookRecDTO> catalogDTO = catReader.FetchBookData(XML_DATA_PATH);
 
-            this.DataContext = new BookListVM(catalog);
+            BookListVM bookListVM = new BookListVM(catalogDTO);
+
+            this.DataContext = bookListVM;
 
             InitializeComponent();
+            this.lstBoxBookSelector.Focus();
+
         }
 
         private void BtnClose_Click(object sender, RoutedEventArgs e)
