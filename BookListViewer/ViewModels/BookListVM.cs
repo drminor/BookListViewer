@@ -20,6 +20,7 @@ namespace BookListViewer.ViewModels
         public BookListVM(List<BookRecDTO> lst)
         {
             Catalog = ProcessBookList(lst);
+            SelectedBook = Catalog[0];
         }
 
         private ObservableCollection<BookReadOnly> ProcessBookList(List<BookRecDTO> lst)
@@ -52,6 +53,20 @@ namespace BookListViewer.ViewModels
             {
                 _catalog = value;
                 OnPropertyChanged(nameof(Catalog));
+            }
+        }
+
+        BookReadOnly _selectedBook;
+        public BookReadOnly SelectedBook
+        {
+            get => _selectedBook;
+            set
+            {
+                if(_selectedBook != value)
+                {
+                    _selectedBook = value;
+                    OnPropertyChanged("SelectedBook");
+                }
             }
         }
 
