@@ -1,4 +1,7 @@
 ﻿using System.Windows;
+using BookDataReaderXML;
+using System.Collections.Generic;
+using BookData;
 
 namespace BookListViewer.Views
 {
@@ -7,12 +10,17 @@ namespace BookListViewer.Views
     /// </summary>
     public partial class BookListWithDetail : Window
     {
+        const string XML_DATA_PATH = @"..\Debug\Data\Books.xml";
+
         public BookListWithDetail()
         {
+            Reader br = new Reader();
+            List<BookRec> lst = br.FetchBookData(XML_DATA_PATH);
+
             InitializeComponent();
         }
 
-        private void btnClose_Click(object sender, RoutedEventArgs e)
+        private void BtnClose_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }

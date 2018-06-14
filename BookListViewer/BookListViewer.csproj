@@ -101,6 +101,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BookDataReaderXML\BookDataReaderXML.csproj">
+      <Project>{1f647a65-abe3-442e-a989-608d1233892c}</Project>
+      <Name>BookDataReaderXML</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BookData\BookData.csproj">
       <Project>{87e7b00c-76e6-4a96-8d23-1e4c39ea9f5d}</Project>
       <Name>BookData</Name>

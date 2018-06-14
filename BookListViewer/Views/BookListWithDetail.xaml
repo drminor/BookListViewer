@@ -23,7 +23,7 @@
         <Grid Grid.Row="1">
             <Border BorderThickness="2pt" BorderBrush="AliceBlue">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" >
-                    <Button Content="Close" Height="30" Width="100" Click="btnClose_Click" FontSize="14pt" />
+                    <Button Content="Close" Height="30" Width="100" Click="BtnClose_Click" FontSize="14pt" />
                 </StackPanel>
             </Border>
 
