@@ -54,6 +54,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\BookReadOnly.cs" />
     <Compile Include="ViewModels\BookListVM.cs" />
     <Compile Include="Views\BookListWithDetail.xaml.cs">
       <DependentUpon>BookListWithDetail.xaml</DependentUpon>
@@ -111,9 +112,7 @@
       <Name>BookData</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Data\Books.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

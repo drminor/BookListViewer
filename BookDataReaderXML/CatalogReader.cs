@@ -1,16 +1,12 @@
-﻿using System;
+﻿using BookData;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
-using BookData;
 
 namespace BookDataReaderXML
 {
-    public class Reader
+    public class CatalogReader
     {
-
         public List<BookRec> FetchBookData(string path)
         {
             List<BookRec> result = new List<BookRec>();
@@ -35,8 +31,8 @@ namespace BookDataReaderXML
                     }
                 }
             }
-            reader.Close();
 
+            reader.Close();
             return result;
         }
 
@@ -51,35 +47,38 @@ namespace BookDataReaderXML
             {
                 if (reader.NodeType == XmlNodeType.Element)
                 {
-                    if (reader.Name == "author")
-                    {
-                        reader.Read();
-                        result.Author = reader.Value;
-                    }
-                    else if (reader.Name == "title")
-                    {
-                        reader.Read();
-                        result.Title = reader.Value;
-                    }
-                    else
-                    {
-                        continue; // Continue the while loop (read and process the next node.)
-                    }
+                    HandleElementNode(reader, result);
                 }
-                else if(reader.NodeType == XmlNodeType.EndElement)
+                else
                 {
-                    if(reader.Name == "book")
+                    if(reader.NodeType == XmlNodeType.EndElement && reader.Name == "book")
                     {
                         break; // Exit while loop.
                     }
                 }
-                else
-                {
-                    continue; // Continue the while loop (read and process the next node.)
-                }
             }
 
             return result;
+        }
+
+        private void HandleElementNode(XmlTextReader reader, BookRec bookRec)
+        {
+            switch (reader.Name)
+            {
+                case "author": bookRec.Author = GetElementValue(reader); break;
+                case "title": bookRec.Title = GetElementValue(reader); break;
+                case "description": bookRec.Description = GetElementValue(reader); break;
+
+                default:
+                    break;
+            }
+
+        }
+
+        private string GetElementValue(XmlTextReader reader)
+        {
+            reader.Read();
+            return reader.Value;
         }
 
         private int GetId(string idAndPrefix)
