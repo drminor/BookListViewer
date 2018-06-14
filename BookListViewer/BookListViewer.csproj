@@ -54,6 +54,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\BookListVM.cs" />
     <Compile Include="Views\BookListWithDetail.xaml.cs">
       <DependentUpon>BookListWithDetail.xaml</DependentUpon>
     </Compile>
