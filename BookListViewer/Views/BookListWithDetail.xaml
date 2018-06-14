@@ -11,7 +11,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="100"/>
+            <RowDefinition Height="55"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -21,7 +21,12 @@
         </Grid>
 
         <Grid Grid.Row="1">
-            <Button Content="Close" Click="Button_Click" />
+            <Border BorderThickness="2pt" BorderBrush="AliceBlue">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <Button Content="Close" Height="30" Width="100" Click="btnClose_Click" FontSize="14pt" />
+                </StackPanel>
+            </Border>
+
 
 
 
