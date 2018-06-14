@@ -9,7 +9,7 @@ namespace BookListViewer.Models
         public int Id { get; }
         public string Author { get; }
         public string Title { get; }
-        public Genre BookGenre { get; }
+        public string Genre { get; }
         public Decimal Price { get; }
         public DateTime PublishDate { get; }
         public string Description { get; }
@@ -26,7 +26,7 @@ namespace BookListViewer.Models
             Id = bookRec.Id;
             Author = bookRec.Author;
             Title = bookRec.Title;
-            BookGenre = bookRec.Genre;
+            Genre = bookRec.Genre;
             Price = bookRec.Price;
             PublishDate = bookRec.PublishDate;
             Description = bookRec.Description;

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
+using System.Text.RegularExpressions;
 
 namespace BookDataReaderXML
 {
@@ -66,8 +67,28 @@ namespace BookDataReaderXML
             switch (reader.Name)
             {
                 case "author": bookRec.Author = GetElementValue(reader); break;
+
                 case "title": bookRec.Title = GetElementValue(reader); break;
-                case "description": bookRec.Description = GetElementValue(reader); break;
+                case "genre": bookRec.Genre = GetElementValue(reader); break;
+
+                //case "genre":
+                //    {
+                //        string genre = GetElementValue(reader);
+                //        genre = genre.Replace(" ", "");
+                //        bookRec.Genre = (Genre)Enum.Parse(typeof(Genre), genre);
+                //        break;
+                //    }
+
+                case "price": bookRec.Price = Decimal.Parse(GetElementValue(reader)); break;
+
+                case "publish_date": bookRec.PublishDate = DateTime.Parse(GetElementValue(reader)); break;
+
+                case "description":
+                    {
+                        string description = GetElementValue(reader);
+                        bookRec.Description = Regex.Replace(description, @"\s+", " ");
+                        break;
+                    }
 
                 default:
                     break;

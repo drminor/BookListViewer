@@ -19,7 +19,7 @@ namespace BookListViewer
         {
             BookListWithDetail booksListViewerWindow = new BookListWithDetail();
 
-            Thread.Sleep(1000);
+            Thread.Sleep(500);
 
             booksListViewerWindow.Show();
 
