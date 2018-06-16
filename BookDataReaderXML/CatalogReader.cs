@@ -3,16 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Xml;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace BookDataReaderXML
 {
     public class CatalogReader
     {
-        public List<BookRecDTO> FetchBookData(string path)
+        public List<BookRecDTO> FetchBookData(Stream xmlCatalogStream)
         {
             List<BookRecDTO> result = new List<BookRecDTO>();
 
-            XmlTextReader reader = new XmlTextReader(path)
+            XmlTextReader reader = new XmlTextReader(xmlCatalogStream)
             {
                 WhitespaceHandling = WhitespaceHandling.None
             };
