@@ -1,42 +1,85 @@
 ﻿using BookData;
 using System;
 using System.Collections.Generic;
-using System.Xml;
-using System.Text.RegularExpressions;
 using System.IO;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Xml;
 
 namespace BookDataReaderXML
 {
     public class CatalogReader
     {
-        public List<BookRecDTO> FetchBookData(Stream xmlCatalogStream)
+        public Task<List<BookRecDTO>> FetchBookDataAsync(Stream xmlCatalogStream, CancellationToken cancellationToken)
         {
-            List<BookRecDTO> result = new List<BookRecDTO>();
-
-            XmlTextReader reader = new XmlTextReader(xmlCatalogStream)
+            return Task.Run(() =>
             {
-                WhitespaceHandling = WhitespaceHandling.None
-            };
+                List<BookRecDTO> result = new List<BookRecDTO>();
 
-            while (reader.Read())
-            {
-                if (reader.NodeType == XmlNodeType.Element)
+                XmlTextReader reader = new XmlTextReader(xmlCatalogStream)
                 {
-                    if (reader.Name == "catalog")
+                    WhitespaceHandling = WhitespaceHandling.None
+                };
+
+                while (reader.Read())
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    if (reader.NodeType == XmlNodeType.Element)
                     {
-                        continue; // Skip this node, continue the while loop and read the next node.
-                    }
-                    else if(reader.Name == "book")
-                    {
-                        // Hand the reader to the Parse Book Rec routine.
-                        result.Add(ParseBookRec(reader));
+                        if (reader.Name == "catalog")
+                        {
+                            continue; // Skip this node, continue the while loop and read the next node.
+                        }
+                        else if (reader.Name == "book")
+                        {
+                            // Hand the reader to the Parse Book Rec routine.
+                            Thread.Sleep(150);
+                            result.Add(ParseBookRec(reader));
+                        }
                     }
                 }
-            }
 
-            reader.Close();
-            return result;
+                reader.Close();
+                xmlCatalogStream.Close();
+
+                return result;
+
+            }, cancellationToken);
         }
+
+        //public List<BookRecDTO> FetchBookData(Stream xmlCatalogStream)
+        //{
+        //    List<BookRecDTO> result = new List<BookRecDTO>();
+
+        //    XmlTextReader reader = new XmlTextReader(xmlCatalogStream)
+        //    {
+        //        WhitespaceHandling = WhitespaceHandling.None
+        //    };
+
+        //    while (reader.Read())
+        //    {
+        //        if (reader.NodeType == XmlNodeType.Element)
+        //        {
+        //            if (reader.Name == "catalog")
+        //            {
+        //                continue; // Skip this node, continue the while loop and read the next node.
+        //            }
+        //            else if(reader.Name == "book")
+        //            {
+        //                // Hand the reader to the Parse Book Rec routine.
+        //                Thread.Sleep(200);
+        //                result.Add(ParseBookRec(reader));
+        //            }
+        //        }
+        //    }
+
+        //    reader.Close();
+        //    xmlCatalogStream.Close();
+
+        //    return result;
+        //}
 
         private BookRecDTO ParseBookRec(XmlTextReader reader)
         {
