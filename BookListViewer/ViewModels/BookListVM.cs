@@ -15,7 +15,16 @@ namespace BookListViewer.ViewModels
 
         #endregion
 
+        public BookListVM GetBookListVM(List<BookRecDTO> lst)
+        {
+            return new BookListVM(lst);
+        }
+
         #region Constructor
+
+        public BookListVM() : this(new List<BookRecDTO>())
+        {
+        }
 
         public BookListVM(List<BookRecDTO> lst)
         {

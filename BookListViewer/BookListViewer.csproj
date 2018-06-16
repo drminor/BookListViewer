@@ -56,6 +56,7 @@
     </ApplicationDefinition>
     <Compile Include="Models\BookReadOnly.cs" />
     <Compile Include="ViewModels\BookListVM.cs" />
+    <Compile Include="Views\BookListDataContextSelector.cs" />
     <Compile Include="Views\BookListWithDetail.xaml.cs">
       <DependentUpon>BookListWithDetail.xaml</DependentUpon>
     </Compile>
