@@ -7,8 +7,6 @@ namespace BookListViewer.Views
     /// </summary>
     public partial class BookListWithDetail : Window
     {
-        const string BOOK_RESOURCE_PATH = @"Data\Books.xml";
-
         public BookListWithDetail()
         {
             InitializeComponent();
