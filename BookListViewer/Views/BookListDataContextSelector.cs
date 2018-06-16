@@ -11,15 +11,7 @@ namespace BookListViewer.Views
 {
     public class BookListDataContextSelector
     {
-        public const string DEFAULT_RESOURCE_NAME = "BooksXXX";
-
-        // The default, parameterless constructor is provided so that the XAML editor
-        // recognizes this class as a candidate to serve as an ObjectDataProvider.
-        // This is required even though the caller should specify a method name, e.g. GetDataContext.
-        public object GetDataContext()
-        {
-            return GetDataContext(null);
-        }
+        public const string DEFAULT_RESOURCE_NAME = "Books";
 
         public object GetDataContext(string resourceName)
         {
