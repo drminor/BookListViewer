@@ -14,7 +14,6 @@
                 <sys:String>Books</sys:String>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
-
     </Window.Resources>
 
     <Grid DataContext="{StaticResource ds1}">
