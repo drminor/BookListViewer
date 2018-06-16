@@ -16,6 +16,7 @@ namespace BookListViewer.Views
 
         private void BtnClose_Click(object sender, RoutedEventArgs e)
         {
+            // TODO: Raise a cancel task event and make the ViewModel listen for this event.
             this.Close();
         }
     }
