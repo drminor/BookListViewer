@@ -15,21 +15,11 @@ namespace BookListViewer.Views
 
         public object GetDataContext(string resourceName)
         {
-            if (resourceName == null || resourceName == string.Empty)
-            {
-                resourceName = DEFAULT_RESOURCE_NAME;
-            }
-            else
-            {
-                // We are expecting a Resource Name with no file extension.
-                // If the caller includes the ".xml" extension,
-                // remove it -- since later we are going to append it unconditionally.
-                if(resourceName.ToLower().EndsWith(".xml"))
-                {
-                    resourceName = resourceName.Substring(0, resourceName.Length - 4);
-                }
-            }
+            // Use the default value if no value was provided and
+            // remove the .xml extension if included.
+            resourceName = NormalizeResourceName(resourceName);
 
+            // Parse the XML data file into a list of BookRecDTO objects.
             List<BookRecDTO> catalogDTO;
             using (Stream stream = GetXmlDataStream(resourceName))
             {
@@ -37,7 +27,9 @@ namespace BookListViewer.Views
                 catalogDTO = catReader.FetchBookData(stream);
             }
 
+            // Create a View Model using the list of BookRecDTO objects
             BookListVM result = new BookListVM(catalogDTO);
+
             return result;
         }
 
@@ -90,6 +82,30 @@ namespace BookListViewer.Views
             {
                 throw new InvalidOperationException($"Cannot find design-time XML file at path: {filePath}.");
             }
+        }
+
+        private string NormalizeResourceName(string resourceName)
+        {
+            // Usually the result will be argument, unchanged.
+            string result = resourceName;
+
+            if (resourceName == null || resourceName == string.Empty)
+            {
+                // If no value was specified, use the default.
+                result = DEFAULT_RESOURCE_NAME;
+            }
+            else
+            {
+                // We are expecting a Resource Name with no file extension.
+                // If the caller includes the ".xml" extension,
+                // remove it -- since later we are going to append it unconditionally.
+                if (resourceName.ToLower().EndsWith(".xml"))
+                {
+                    result = resourceName.Substring(0, resourceName.Length - 4);
+                }
+            }
+
+            return result;
         }
 
         private bool InDesignMode
