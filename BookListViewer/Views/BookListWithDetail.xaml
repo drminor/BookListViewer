@@ -9,7 +9,7 @@
         Title="The Book List" Height="400" Width="750" MinHeight="250" MinWidth="300">
 
     <Window.Resources>
-        <ObjectDataProvider x:Key="ds1" ObjectType="{x:Type local:BookListDataContextSelector}" MethodName="GetDataContext">
+        <ObjectDataProvider x:Key="ds1" MethodName="GetDataContext" ObjectType="{x:Type local:BookListDataContextSelector}">
             <ObjectDataProvider.MethodParameters>
                 <sys:String>Books</sys:String>
             </ObjectDataProvider.MethodParameters>
@@ -33,9 +33,7 @@
                     <ColumnDefinition Width="3*" />
                 </Grid.ColumnDefinitions>
 
-
                 <!-- ListBox to Select a Book Record -->
-
                 <ListBox x:Name="lstBoxBookSelector" Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="5,10,0,5"
                      ItemsSource="{Binding Catalog}" ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                      ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -75,7 +73,7 @@
                     <TextBlock Text="{Binding PublishDate, Mode=OneWay, StringFormat=d}" Height="23" Margin="100,82,15,0" TextWrapping="NoWrap" VerticalAlignment="Top"/>
 
                     <Label Content="Description:" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top" Width="114"/>
-                    <TextBlock Text="{Binding Description, Mode=OneWay}" Height="51" Margin="100,105,15,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                    <TextBlock Text="{Binding Description}" Height="51" Margin="100,105,15,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
 
                     <Label Content="Price:" HorizontalAlignment="Left" Margin="10,165,0,0" VerticalAlignment="Top" Width="114"/>
                     <TextBlock Text="{Binding Price, Mode=OneWay, StringFormat=\{0:c\}}" Height="23" Margin="100,170,10,0" TextWrapping="NoWrap" VerticalAlignment="Top"/>

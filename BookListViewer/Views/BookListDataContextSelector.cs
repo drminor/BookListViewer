@@ -10,26 +10,61 @@ namespace BookListViewer.Views
 {
     public class BookListDataContextSelector
     {
+        public const string DEFAULT_RESOURCE_NAME = "Books";
+
+        public object GetDataContext()
+        {
+            return GetDataContext(null);
+        }
+
         public object GetDataContext(string resourceName)
         {
+            BookListVM result;
+
             //string ResourcePath = @"Data\Books.xml";
-
-
             if (resourceName == null || resourceName == string.Empty)
             {
-                resourceName = "Books";
+                resourceName = DEFAULT_RESOURCE_NAME;
             }
 
-            string ResourcePath = $"Data\\{resourceName}.xml";
+            if (InDesignMode)
+            {
+                string filePath = $"C:\\DEV\\BookListViewer\\BookListViewer\\Data\\{resourceName}.xml";
+                List<BookRecDTO> catalogDTO = FetchBookDataFromFile(filePath);
+                result = new BookListVM(catalogDTO);
+            }
+            else
+            {
+                string ResourcePath = $"Data\\{resourceName}.xml";
 
-            List<BookRecDTO> catalogDTO = FetchBookData(ResourcePath);
-            BookListVM result = new BookListVM(catalogDTO);
+                List<BookRecDTO> catalogDTO = FetchBookDataFromResource(ResourcePath);
+                result = new BookListVM(catalogDTO);
+            }
+
             return result;
         }
 
-        private List<BookRecDTO> FetchBookData(string ResourcePath)
+        private List<BookRecDTO> FetchBookDataFromFile(string filePath)
         {
-            Uri uri = new Uri(ResourcePath, UriKind.Relative);
+            System.IO.Stream sr = new System.IO.FileStream
+                (
+                filePath,
+                System.IO.FileMode.Open,
+                System.IO.FileAccess.Read,
+                System.IO.FileShare.Read
+                );
+
+            CatalogReader catReader = new CatalogReader();
+
+            List<BookRecDTO> catalogDTO = catReader.FetchBookData(sr);
+            sr.Close();
+
+            return catalogDTO;
+        }
+
+        private List<BookRecDTO> FetchBookDataFromResource(string resourcePath)
+        {
+            Uri uri = new Uri(resourcePath, UriKind.Relative);
             StreamResourceInfo info = Application.GetResourceStream(uri);
 
             CatalogReader catReader = new CatalogReader();
@@ -38,6 +73,15 @@ namespace BookListViewer.Views
             info.Stream.Close();
 
             return catalogDTO;
+        }
+
+        private bool InDesignMode
+        {
+            get
+            {
+                bool designTime = System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject());
+                return designTime;
+            }
         }
     }
 }
