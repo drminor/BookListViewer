@@ -17,10 +17,13 @@ namespace BookDataReaderXML
             {
                 List<BookRecDTO> result = new List<BookRecDTO>();
 
-                XmlTextReader reader = new XmlTextReader(xmlCatalogStream)
+                XmlReaderSettings readerSettings = new XmlReaderSettings
                 {
-                    WhitespaceHandling = WhitespaceHandling.None
+                    CloseInput = true,
+                    ConformanceLevel = ConformanceLevel.Document
                 };
+
+                XmlReader reader = XmlReader.Create(xmlCatalogStream, readerSettings);
 
                 while (reader.Read())
                 {
@@ -35,7 +38,7 @@ namespace BookDataReaderXML
                         else if (reader.Name == "book")
                         {
                             // Hand the reader to the Parse Book Rec routine.
-                            Thread.Sleep(150);
+                            Thread.Sleep(300);
                             result.Add(ParseBookRec(reader));
                         }
                     }
@@ -53,10 +56,13 @@ namespace BookDataReaderXML
         {
             List<BookRecDTO> result = new List<BookRecDTO>();
 
-            XmlTextReader reader = new XmlTextReader(xmlCatalogStream)
+            XmlReaderSettings readerSettings = new XmlReaderSettings
             {
-                WhitespaceHandling = WhitespaceHandling.None
+                CloseInput = true,
+                ConformanceLevel = ConformanceLevel.Document
             };
+
+            XmlReader reader = XmlReader.Create(xmlCatalogStream, readerSettings);
 
             while (reader.Read())
             {
@@ -75,12 +81,10 @@ namespace BookDataReaderXML
             }
 
             reader.Close();
-            xmlCatalogStream.Close();
-
             return result;
         }
 
-        private BookRecDTO ParseBookRec(XmlTextReader reader)
+        private BookRecDTO ParseBookRec(XmlReader reader)
         {
             BookRecDTO result = new BookRecDTO();
 
@@ -105,7 +109,7 @@ namespace BookDataReaderXML
             return result;
         }
 
-        private void HandleElementNode(XmlTextReader reader, BookRecDTO bookRec)
+        private void HandleElementNode(XmlReader reader, BookRecDTO bookRec)
         {
             switch (reader.Name)
             {
@@ -139,7 +143,7 @@ namespace BookDataReaderXML
 
         }
 
-        private string GetElementValue(XmlTextReader reader)
+        private string GetElementValue(XmlReader reader)
         {
             reader.Read();
             return reader.Value;
