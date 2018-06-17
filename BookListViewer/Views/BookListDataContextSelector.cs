@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Resources;
 using System.IO;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace BookListViewer.Views
 {
@@ -13,22 +15,32 @@ namespace BookListViewer.Views
     {
         public const string DEFAULT_RESOURCE_NAME = "Books";
 
+        private CancellationTokenSource _cancellationTS = new CancellationTokenSource();
+
         public object GetDataContext(string resourceName)
         {
+            BookListVM result = null;
+
             // Use the default value if no value was provided and
             // remove the .xml extension if included.
             resourceName = NormalizeResourceName(resourceName);
 
-            // Parse the XML data file into a list of BookRecDTO objects.
-            List<BookRecDTO> catalogDTO;
-            using (Stream stream = GetXmlDataStream(resourceName))
-            {
-                CatalogReader catReader = new CatalogReader();
-                catalogDTO = catReader.FetchBookData(stream);
-            }
+            // Open the XML Data Stream for reading.
+            Stream stream = GetXmlDataStream(resourceName);
 
-            // Create a View Model using the list of BookRecDTO objects
-            BookListVM result = new BookListVM(catalogDTO);
+            // Create an asynchronous task that will...
+            // parse the XML data file into a list of BookRecDTO objects.
+            CatalogReader catReader = new CatalogReader();
+            Task<List<BookRecDTO>> fetchDataTask = catReader.FetchBookDataAsync(stream, _cancellationTS.Token);
+
+            // Create the ViewModel that will be assigned to the View's DataContext.
+            // The ViewModel is given a reference to the task so that it can await the results.
+            // If a request has been made to cancel this task, there's no reason to create the ViewModel.
+
+            if(!_cancellationTS.Token.IsCancellationRequested)
+            {
+                result = new BookListVM(fetchDataTask, _cancellationTS);
+            }
 
             return result;
         }
