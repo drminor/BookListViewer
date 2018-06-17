@@ -8,6 +8,8 @@ using System.Windows.Resources;
 using System.IO;
 using System.Threading.Tasks;
 using System.Threading;
+using System.ComponentModel;
+using System.Diagnostics;
 
 namespace BookListViewer.Views
 {
@@ -26,7 +28,9 @@ namespace BookListViewer.Views
             resourceName = NormalizeResourceName(resourceName);
 
             // Open the XML Data Stream for reading.
-            Stream stream = GetXmlDataStream(resourceName);
+            bool inDesignMode = false;
+            SetDesignModeFlag(ref inDesignMode);
+            Stream stream = GetXmlDataStream(resourceName, inDesignMode);
 
             // Create an asynchronous task that will...
             // parse the XML data file into a list of BookRecDTO objects.
@@ -45,13 +49,11 @@ namespace BookListViewer.Views
             return result;
         }
 
-        private Stream GetXmlDataStream(string resourceName)
+        private Stream GetXmlDataStream(string resourceName, bool inDesignMode)
         {
             Stream result;
 
-#if DEBUG
-            // Only check to see if we are in design mode if we are running in DEBUG.
-            if (InDesignMode)
+            if (inDesignMode)
             {
                 result = GetXmlDataFromFile(resourceName);
             }
@@ -59,9 +61,6 @@ namespace BookListViewer.Views
             {
                 result = GetXmlDataFromResource(resourceName);
             }
-#else
-            result = GetXMLDataFromResource(resourceName);
-#endif
             return result;
         }
 
@@ -120,13 +119,10 @@ namespace BookListViewer.Views
             return result;
         }
 
-        private bool InDesignMode
+        [Conditional("DEBUG")] // Only called if the (compilation) DEBUG constant is set
+        private void SetDesignModeFlag(ref bool inDesignMode)
         {
-            get
-            {
-                bool designTime = System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject());
-                return designTime;
-            }
+            inDesignMode = System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject());
         }
     }
 }

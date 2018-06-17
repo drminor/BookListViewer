@@ -9,6 +9,10 @@ namespace BookListViewer.Views
     {
         public BookListWithDetail()
         {
+            //BookListDataContextSelector selector = new BookListDataContextSelector();
+            //object dc = selector.GetDataContext("Books");
+            //this.DataContext = dc;
+
             InitializeComponent();
 
             this.lstBoxBookSelector.Focus();
