@@ -104,7 +104,7 @@ namespace BookListViewer.ViewModels
         {
             get
             {
-                System.Diagnostics.Debug.WriteLine($"Reading from Catalog @: {System.DateTime.Now}.");
+                //System.Diagnostics.Debug.WriteLine($"The getter for the Catalog property of the BookLisVM class is being accessed. @: {System.DateTime.Now}.");
                 return _catalog;
             }
 
