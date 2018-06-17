@@ -9,7 +9,7 @@
         Title="The Book List" Height="400" Width="750" MinHeight="250" MinWidth="300">
 
     <Window.Resources>
-        <ObjectDataProvider x:Key="ds1" MethodName="GetDataContext" ObjectType="{x:Type local:BookListDataContextSelector}">
+        <ObjectDataProvider x:Key="ds1" MethodName="GetViewModel" ObjectType="{x:Type local:BookListDesignTimeDataProvider}">
             <ObjectDataProvider.MethodParameters>
                 <sys:String>Books</sys:String>
             </ObjectDataProvider.MethodParameters>

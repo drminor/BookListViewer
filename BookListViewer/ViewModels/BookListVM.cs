@@ -1,12 +1,11 @@
 ﻿using BookData;
+using BookListViewer.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-
-using BookListViewer.Models;
-using System.Threading.Tasks;
-
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace BookListViewer.ViewModels
 {
@@ -14,16 +13,10 @@ namespace BookListViewer.ViewModels
     {
         #region Private Properties
 
+        private CancellationTokenSource _cancellationTS;
         private ObservableCollection<BookReadOnly> _catalog= new ObservableCollection<BookReadOnly>();
 
-        private CancellationTokenSource _cancellationTS = null;
-
         #endregion
-
-        public BookListVM GetBookListVM(List<BookRecDTO> lst)
-        {
-            return new BookListVM(lst);
-        }
 
         #region Constructor
 
@@ -31,8 +24,10 @@ namespace BookListViewer.ViewModels
         {
         }
 
-        public BookListVM(List<BookRecDTO> lst = null)
+        public BookListVM(List<BookRecDTO> lst)
         {
+            _cancellationTS = null;
+
             Catalog = ProcessBookList(lst);
             SelectedBook = Catalog[0];
         }
@@ -40,34 +35,69 @@ namespace BookListViewer.ViewModels
         public BookListVM(Task<List<BookRecDTO>> task, CancellationTokenSource cancellationTS)
         {
             _cancellationTS = cancellationTS;
-            task.ContinueWith(ProcessBooks, _cancellationTS.Token);
+
+            // TODO: Find out what the cancellationToken argument is used for.
+            task.ContinueWith(ProcessBooks, cancellationTS.Token);
         }
 
         private void ProcessBooks(Task<List<BookRecDTO>> task)
         {
-            if(task.IsCompleted && !task.IsCanceled && !task.IsFaulted)
+            if(task.IsCompleted)
             {
-                List<BookRecDTO> lst = task.Result;
+                if(task.IsFaulted)
+                {
+                    string errMessage = $"An error occured while loading the book data." +
+                        $" The error message is {task.Exception.Message}.";
 
-                Catalog = ProcessBookList(lst);
-                SelectedBook = Catalog[0];
+                    throw new InvalidOperationException(errMessage, task.Exception);
+                }
+
+                if (!task.IsCanceled)
+                {
+                    List<BookRecDTO> lst = task.Result;
+
+                    Catalog = ProcessBookList(lst);
+                    SelectedBook = Catalog[0];
+                }
             }
         }
 
         private ObservableCollection<BookReadOnly> ProcessBookList(List<BookRecDTO> lst)
         {
-            System.Diagnostics.Debug.WriteLine($"Processing Book List @: {System.DateTime.Now}. ");
+            //System.Diagnostics.Debug.WriteLine($"Processing Book List @: {System.DateTime.Now}. ");
 
             ObservableCollection<BookReadOnly> result = new ObservableCollection<BookReadOnly>();
 
-            foreach (BookRecDTO br in lst)
+            if(lst != null)
             {
-                BookReadOnly bookReadOnly = new BookReadOnly(br);
-                result.Add(bookReadOnly);
+                foreach (BookRecDTO br in lst)
+                {
+                    if(_cancellationTS?.IsCancellationRequested == true)
+                    {
+                        return null;
+                    }
+
+                    BookReadOnly bookReadOnly = new BookReadOnly(br);
+                    result.Add(bookReadOnly);
+                }
             }
 
             return result;
         }
+
+        #endregion
+
+        #region Public Methods
+
+        public void CancelDataLoading()
+        {
+            if (_cancellationTS != null) _cancellationTS.Cancel();
+        }
+
+        //public BookListVM GetBookListVM(List<BookRecDTO> lst)
+        //{
+        //    return new BookListVM(lst);
+        //}
 
         #endregion
 

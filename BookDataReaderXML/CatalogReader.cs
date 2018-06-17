@@ -49,37 +49,37 @@ namespace BookDataReaderXML
             }, cancellationToken);
         }
 
-        //public List<BookRecDTO> FetchBookData(Stream xmlCatalogStream)
-        //{
-        //    List<BookRecDTO> result = new List<BookRecDTO>();
+        public List<BookRecDTO> FetchBookData(Stream xmlCatalogStream)
+        {
+            List<BookRecDTO> result = new List<BookRecDTO>();
 
-        //    XmlTextReader reader = new XmlTextReader(xmlCatalogStream)
-        //    {
-        //        WhitespaceHandling = WhitespaceHandling.None
-        //    };
+            XmlTextReader reader = new XmlTextReader(xmlCatalogStream)
+            {
+                WhitespaceHandling = WhitespaceHandling.None
+            };
 
-        //    while (reader.Read())
-        //    {
-        //        if (reader.NodeType == XmlNodeType.Element)
-        //        {
-        //            if (reader.Name == "catalog")
-        //            {
-        //                continue; // Skip this node, continue the while loop and read the next node.
-        //            }
-        //            else if(reader.Name == "book")
-        //            {
-        //                // Hand the reader to the Parse Book Rec routine.
-        //                Thread.Sleep(200);
-        //                result.Add(ParseBookRec(reader));
-        //            }
-        //        }
-        //    }
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Element)
+                {
+                    if (reader.Name == "catalog")
+                    {
+                        continue; // Skip this node, continue the while loop and read the next node.
+                    }
+                    else if (reader.Name == "book")
+                    {
+                        // Hand the reader to the Parse Book Rec routine.
+                        Thread.Sleep(200);
+                        result.Add(ParseBookRec(reader));
+                    }
+                }
+            }
 
-        //    reader.Close();
-        //    xmlCatalogStream.Close();
+            reader.Close();
+            xmlCatalogStream.Close();
 
-        //    return result;
-        //}
+            return result;
+        }
 
         private BookRecDTO ParseBookRec(XmlTextReader reader)
         {

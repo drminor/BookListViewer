@@ -1,56 +1,49 @@
 ﻿using BookData;
 using BookDataReaderXML;
-using BookListViewer.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Resources;
-using System.IO;
-using System.Threading.Tasks;
-using System.Threading;
-using System.ComponentModel;
-using System.Diagnostics;
 
-namespace BookListViewer.Views
+namespace BookListViewer.DAL
 {
-    public class BookListDataContextSelector
+    public class BookListDAL
     {
         public const string DEFAULT_RESOURCE_NAME = "Books";
 
-        private CancellationTokenSource _cancellationTS = new CancellationTokenSource();
-
-        public object GetDataContext(string resourceName)
-        {
-            BookListVM result = null;
-
-            Task<List<BookRecDTO>> fetchDataTask = GetAFetchDataTask(resourceName);
-            // Create the ViewModel that will be assigned to the View's DataContext.
-            // The ViewModel is given a reference to the task so that it can await the results.
-            // If a request has been made to cancel this task, there's no reason to create the ViewModel.
-
-            if (!_cancellationTS.Token.IsCancellationRequested)
-            {
-                result = new BookListVM(fetchDataTask, _cancellationTS);
-            }
-
-            return result;
-        }
-
-        public Task<List<BookRecDTO>> GetAFetchDataTask(string resourceName)
+        public Task<List<BookRecDTO>> FetchBookDataAsync(string resourceName, bool useSampleData, CancellationToken cancellationToken)
         {
             // Use the default value if no value was provided and
             // remove the .xml extension if included.
             resourceName = NormalizeResourceName(resourceName);
 
             // Open the XML Data Stream for reading.
-            bool inDesignMode = false;
-            SetDesignModeFlag(ref inDesignMode);
-            Stream stream = GetXmlDataStream(resourceName, inDesignMode);
+            Stream stream = GetXmlDataStream(resourceName, useSampleData);
 
             // Create an asynchronous task that will...
             // parse the XML data file into a list of BookRecDTO objects.
             CatalogReader catReader = new CatalogReader();
-            Task<List<BookRecDTO>> result = catReader.FetchBookDataAsync(stream, _cancellationTS.Token);
+            Task<List<BookRecDTO>> result = catReader.FetchBookDataAsync(stream, cancellationToken);
+
+            return result;
+        }
+
+        public List<BookRecDTO> FetchBookData(string resourceName, bool useSampleData)
+        {
+            // Use the default value if no value was provided and
+            // remove the .xml extension if included.
+            resourceName = NormalizeResourceName(resourceName);
+
+            // Open the XML Data Stream for reading.
+            Stream stream = GetXmlDataStream(resourceName, useSampleData);
+
+            // Create an asynchronous task that will...
+            // parse the XML data file into a list of BookRecDTO objects.
+            CatalogReader catReader = new CatalogReader();
+            List<BookRecDTO> result = catReader.FetchBookData(stream);
 
             return result;
         }
@@ -76,7 +69,7 @@ namespace BookListViewer.Views
             Uri uri = new Uri(resourcePath, UriKind.Relative);
             StreamResourceInfo info = Application.GetContentStream(uri);
 
-            if(info == null)
+            if (info == null)
             {
                 throw new InvalidOperationException($"Cannot find content file at path: {uri}.");
             }
@@ -123,12 +116,6 @@ namespace BookListViewer.Views
             }
 
             return result;
-        }
-
-        [Conditional("DEBUG")] // Only called if the (compilation) DEBUG constant is set
-        private void SetDesignModeFlag(ref bool inDesignMode)
-        {
-            inDesignMode = System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject());
         }
     }
 }
