@@ -69,7 +69,6 @@ namespace BookDataReaderXML
                     else if (reader.Name == "book")
                     {
                         // Hand the reader to the Parse Book Rec routine.
-                        Thread.Sleep(200);
                         result.Add(ParseBookRec(reader));
                     }
                 }

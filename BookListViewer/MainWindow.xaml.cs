@@ -34,11 +34,8 @@ namespace BookListViewer
 
         private void Window_ContentRendered(object sender, System.EventArgs e)
         {
-
             Thread.Sleep(500);
-
             booksListViewerWindow.Show();
-
             this.Close();
         }
 

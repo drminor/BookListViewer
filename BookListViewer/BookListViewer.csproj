@@ -57,7 +57,6 @@
     <Compile Include="DAL\BookListDAL.cs" />
     <Compile Include="Models\BookReadOnly.cs" />
     <Compile Include="ViewModels\BookListVM.cs" />
-    <None Include="Views\BookListDataContextSelector.cs" />
     <Compile Include="Views\BookListDesignTimeDataProvider.cs" />
     <Compile Include="Views\BookListWithDetail.xaml.cs">
       <DependentUpon>BookListWithDetail.xaml</DependentUpon>

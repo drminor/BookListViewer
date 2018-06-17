@@ -94,11 +94,6 @@ namespace BookListViewer.ViewModels
             if (_cancellationTS != null) _cancellationTS.Cancel();
         }
 
-        //public BookListVM GetBookListVM(List<BookRecDTO> lst)
-        //{
-        //    return new BookListVM(lst);
-        //}
-
         #endregion
 
         #region Public Events and Properties

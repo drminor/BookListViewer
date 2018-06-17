@@ -9,8 +9,6 @@ namespace BookListViewer.Views
     /// </summary>
     public partial class BookListWithDetail : Window
     {
-        //Task<List<BookRecDTO>> _fetchCatalogDataTask;
-
         #region Constructors
 
         public BookListWithDetail()
@@ -24,15 +22,6 @@ namespace BookListViewer.Views
             InitializeComponent();
             this.lstBoxBookSelector.Focus();
         }
-
-        //public BookListWithDetail(Task<List<BookRecDTO>> fetchCatalogDataTask)
-        //{
-        //    _fetchCatalogDataTask = fetchCatalogDataTask;
-
-        //    InitializeComponent();
-
-        //    this.lstBoxBookSelector.Focus();
-        //}
 
         #endregion
 
@@ -49,27 +38,6 @@ namespace BookListViewer.Views
 
             this.Close();
         }
-
-        //private void Window_Loaded(object sender, RoutedEventArgs e)
-        //{
-
-        //    if (_fetchCatalogDataTask == null)
-        //    {
-        //        BookListDataContextSelector selector = new BookListDataContextSelector();
-        //        _fetchCatalogDataTask = selector.GetAFetchDataTask("Books");
-        //    }
-
-        //    BookListVM vm = this.TopGrid?.DataContext as BookListVM;
-
-        //    if (vm == null)
-        //    {
-        //        this.TopGrid.DataContext = new BookListVM(_fetchCatalogDataTask, null);
-        //    }
-        //    else
-        //    {
-        //        vm.LoadData(_fetchCatalogDataTask, null); // TODO create cancel token.
-        //    }
-        //}
 
         #endregion
     }
