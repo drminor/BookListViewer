@@ -37,8 +37,11 @@ namespace BookDataReaderXML
                         }
                         else if (reader.Name == "book")
                         {
+                            // Make this process slower to simulate loading a larger xml data file.
+                            Thread.Sleep(100);
+
+
                             // Hand the reader to the Parse Book Rec routine.
-                            Thread.Sleep(300);
                             result.Add(ParseBookRec(reader));
                         }
                     }
