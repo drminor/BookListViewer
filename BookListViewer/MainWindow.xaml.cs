@@ -8,13 +8,14 @@ using BookData;
 using BookListViewer.ViewModels;
 using BookListViewer.DAL;
 using System.Diagnostics;
+using System;
 
 namespace BookListViewer
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IDisposable
     {
         BookListWithDetail booksListViewerWindow;
 
@@ -59,5 +60,52 @@ namespace BookListViewer
         {
             inDesignMode = System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject());
         }
+
+        #region IDisposable Support
+
+        // Since we "own" a CancellationTokenSource which implements IDisposable, this class must implement IDisposable
+        // see CA1001 for details.
+
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    //Dispose managed state (managed objects).
+                    if(_cancellationTS != null)
+                    {
+                        _cancellationTS.Dispose();
+                    }
+                }
+
+                // If we had any unmanaged resources (unmanaged objects) we would free them here
+                // and override a finalizer below.
+
+                // If we had any large fields, we would set them to null here.
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        // ~MainWindow() {
+        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        //   Dispose(false);
+        // }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            // GC.SuppressFinalize(this);
+        }
+
+        #endregion
+
     }
 }

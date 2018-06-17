@@ -16,7 +16,14 @@
         </ObjectDataProvider>
     </Window.Resources>
 
-    <Grid DataContext="{StaticResource ds1}">
+    <!--
+        Since the The d (expession/blend/2008) namespace is set to mc:Ignorable.
+        The DataContext will only be set to the value provided by the ds1 ObjectDataProvider
+        if we are running in design mode. 
+    
+        When running in execution mode, the DataContext for the Class element is set in the code behind file.
+    -->
+    <Grid d:DataContext="{StaticResource ds1}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="55"/>
