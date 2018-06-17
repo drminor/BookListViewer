@@ -35,9 +35,7 @@ namespace BookListViewer.ViewModels
         public BookListVM(Task<List<BookRecDTO>> task, CancellationTokenSource cancellationTS)
         {
             _cancellationTS = cancellationTS;
-
-            // TODO: Find out what the cancellationToken argument is used for.
-            task.ContinueWith(ProcessBooks, cancellationTS.Token);
+            task.ContinueWith(ProcessBooks);
         }
 
         private void ProcessBooks(Task<List<BookRecDTO>> task)
@@ -89,9 +87,18 @@ namespace BookListViewer.ViewModels
 
         #region Public Methods
 
-        public void CancelDataLoading()
+        // The view should call this method so we can cancel the 
+        // task used to load the book records.
+
+        public void ViewIsClosing()
         {
-            if (_cancellationTS != null) _cancellationTS.Cancel();
+            if (_cancellationTS != null)
+            {
+                if (_cancellationTS.Token.CanBeCanceled)
+                {
+                    _cancellationTS.Cancel();
+                }
+            }
         }
 
         #endregion
