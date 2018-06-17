@@ -96,7 +96,7 @@ namespace BookListViewer.DAL
 
         private string NormalizeResourceName(string resourceName)
         {
-            // Usually the result will be argument, unchanged.
+            // Usually the result will be argument's original value.
             string result = resourceName;
 
             if (resourceName == null || resourceName == string.Empty)
